@@ -14,6 +14,7 @@ ul {
   list-style: none;
 }
 
+/* Button Styles */
 .btn {
   display: inline-block;
   background: var(--light-color);
@@ -40,9 +41,11 @@ ul {
 .btn-filter {
   padding: 0.6rem 1.8rem;
 }
-.btn-clear {
-  width: 10%;
+.instruction {
+  color: #fff;
+  padding-bottom: 10px;
 }
+/* Utilities */
 .container {
   max-width: 1100px;
   margin: auto;
@@ -64,11 +67,6 @@ ul {
 .loader-container img {
   width: 80px;
   height: 80px;
-}
-
-.instruction {
-  color: #fff;
-  padding-bottom: 10px;
 }
 
 /* Navbar */

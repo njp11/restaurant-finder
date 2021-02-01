@@ -41,13 +41,15 @@ const Search = ({
           value="filter"
           className="btn btn-light btn-filter"
         />
+      </form>
+      <div className="search-container">
         <input
           type="button"
           value="Clear filter"
-          className="btn btn-red btn-clear"
+          className="btn btn-red"
           onClick={handleClick}
         />
-      </form>
+      </div>
     </div>
   );
 };
