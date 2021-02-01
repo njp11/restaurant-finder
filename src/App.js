@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -5,7 +6,7 @@ import Navbar from './components/Navbar';
 import Search from './components/Search';
 import Restaurant from './components/Restaurant';
 import loadingImg from '../src/loading2.gif';
-import { getRestaurants, setLoading } from './actions/restaurantActions';
+import { clearError, addMore } from './actions/restaurantActions';
 import Filter from './components/Filter';
 
 const App = ({
@@ -17,14 +18,21 @@ const App = ({
     place,
     filteredResult,
   },
-  getRestaurants,
-  setLoading,
+  addMore,
+  clearError,
 }) => {
-  const addMore = () => {
-    getRestaurants(place, results_start);
+  useEffect(() => {
+    if (displayError) {
+      setTimeout(() => clearError(), 3000);
+    }
+    // eslint-disable-next-line
+  }, [displayError]);
+  const addMoreResults = () => {
+    addMore(place, results_start);
   };
   return (
     <div className="App">
+      {console.log(process.env.REACT_APP_API_KEY)}
       <Navbar />
       <div className="search-container">
         <Search />
@@ -57,7 +65,7 @@ const App = ({
           </div>
           {restaurants.length && (
             <div className="search-container">
-              <button className="btn btn-red" onClick={addMore}>
+              <button className="btn btn-red" onClick={addMoreResults}>
                 Show more
               </button>
               <p className="instruction">
@@ -78,4 +86,4 @@ const mapStateToProps = (state) => ({
   restaurant: state.restaurant,
 });
 
-export default connect(mapStateToProps, { getRestaurants, setLoading })(App);
+export default connect(mapStateToProps, { addMore, clearError })(App);

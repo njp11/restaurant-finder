@@ -5,6 +5,8 @@ import {
   CITY_ERROR,
   FILTER_RESTAURANTS,
   CLEAR_FILTER,
+  CLEAR_ERROR,
+  GET_MORE,
 } from '../actions/types';
 
 const initialState = {
@@ -28,14 +30,23 @@ const restaurantReducer = (state = initialState, action) => {
         results_found,
         results_start: state.results_start + 20,
         results_shown,
-        restaurants: [...state.restaurants, ...restaurants],
-        place: action.payload.restaurants[0].restaurant.location.city,
+        restaurants: [...restaurants],
+        place: action.payload.restaurants[0].restaurant.location.city_id,
         displayError: null,
         loading: false,
         error: null,
       };
       return restaurantsData;
 
+    case GET_MORE:
+      const moreResults = {
+        ...state,
+        restaurants: [...state.restaurants, ...action.payload.restaurants],
+        loading: false,
+        displayError: null,
+        error: null,
+      };
+      return moreResults;
     case FILTER_RESTAURANTS:
       const filtered = {
         ...state,
@@ -77,6 +88,11 @@ const restaurantReducer = (state = initialState, action) => {
       const errors = {
         ...state,
         error: action.payload,
+        displayError: action.payload,
+        results_found: null,
+        results_start: 0,
+        results_shown: null,
+        place: null,
         loading: false,
       };
       return errors;
@@ -85,10 +101,28 @@ const restaurantReducer = (state = initialState, action) => {
       console.error(action.payload);
       const cityError = {
         ...state,
+        restaurants: [],
         displayError: action.payload,
+        results_found: null,
+        results_start: 0,
+        results_shown: null,
+        place: null,
         loading: false,
       };
       return cityError;
+
+    case CLEAR_ERROR:
+      const removeError = {
+        ...state,
+        error: null,
+        displayError: null,
+        results_found: null,
+        results_start: 0,
+        results_shown: null,
+        place: null,
+        loading: false,
+      };
+      return removeError;
 
     default:
       return state;
