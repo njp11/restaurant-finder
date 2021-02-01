@@ -32,7 +32,6 @@ const App = ({
   };
   return (
     <div className="App">
-      {console.log(process.env.REACT_APP_API_KEY)}
       <Navbar />
       <div className="search-container">
         <Search />

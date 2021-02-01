@@ -81,7 +81,7 @@ export const addMore = (city, start) => async (dispatch) => {
   const config = {
     headers: {
       Accept: 'application/json',
-      'user-key': '83cf762fa28744d19097f1338243c7b7',
+      'user-key': process.env.REACT_APP_API_KEY,
     },
   };
   const res = await fetch(
