@@ -1,25 +1,81 @@
-import logo from './logo.svg';
 import './App.css';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import Navbar from './components/Navbar';
+import Search from './components/Search';
+import Restaurant from './components/Restaurant';
+import loadingImg from '../src/loading2.gif';
+import { getRestaurants, setLoading } from './actions/restaurantActions';
+import Filter from './components/Filter';
 
-function App() {
+const App = ({
+  restaurant: {
+    restaurants,
+    loading,
+    displayError,
+    results_start,
+    place,
+    filteredResult,
+  },
+  getRestaurants,
+  setLoading,
+}) => {
+  const addMore = () => {
+    getRestaurants(place, results_start);
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar />
+      <div className="search-container">
+        <Search />
+      </div>
+      <div className="search-container">
+        <Filter />
+      </div>
+      {displayError && (
+        <div className="container text-center">
+          <h2 className="errorMsg">{displayError}</h2>
+        </div>
+      )}
+      {loading ? (
+        <div className="loader-container">
+          <img src={loadingImg} alt="loading" />
+        </div>
+      ) : filteredResult.length ? (
+        <div className="container grid-sm">
+          {filteredResult.map((item) => (
+            <Restaurant item={item} key={item.restaurant.R.res_id} />
+          ))}
+        </div>
+      ) : (
+        <div>
+          <div className="container grid-sm">
+            {restaurants.length &&
+              restaurants.map((item) => (
+                <Restaurant item={item} key={item.restaurant.R.res_id} />
+              ))}
+          </div>
+          {restaurants.length && (
+            <div className="search-container">
+              <button className="btn btn-red" onClick={addMore}>
+                Show more
+              </button>
+              <p className="instruction">
+                click the button to load more results
+              </p>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
-}
+};
 
-export default App;
+App.propTypes = {
+  restaurant: PropTypes.object.isRequired,
+};
+const mapStateToProps = (state) => ({
+  restaurant: state.restaurant,
+});
+
+export default connect(mapStateToProps, { getRestaurants, setLoading })(App);
